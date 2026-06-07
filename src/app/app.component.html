@@ -1,0 +1,28 @@
+<div class="page-center">
+  <div class="btn-row">
+    <button (click)="shuffle()">ערבב</button>
+    <!-- <button (click)="rotateAll()">סובב</button> -->
+    <button (click)="setBorder()" [ngClass]="{'border': border}">גבולות</button>
+  </div>
+  <table [style.border]="solved ? '6px solid red' : null">
+    <tr *ngFor="let row of [0, 1, 2]">
+      <td *ngFor="let col of [0, 1, 2]" draggable="true" (dragstart)="onDragStart(row * 3 + col)"
+        (dragover)="onDragOver($event)" (drop)="onDrop(row * 3 + col)">
+        <div class="diagonal-split">
+          <div class="tri top"
+            [style.background-color]="solved && row === 0 ? 'white' : colors[cellValues[row * 3 + col][0]]"
+            (click)="onTriangleClick(row * 3 + col, 1)"></div>
+          <div class="tri right"
+            [style.background-color]="solved && col === 2 ? 'white' : colors[cellValues[row * 3 + col][1]]"
+            (click)="onTriangleClick(row * 3 + col, 2)"></div>
+          <div class="tri bottom"
+            [style.background-color]="solved && row === 2 ? 'white' : colors[cellValues[row * 3 + col][2]]"
+            (click)="onTriangleClick(row * 3 + col, 3)"></div>
+          <div class="tri left"
+            [style.background-color]="solved && col === 0 ? 'white' : colors[cellValues[row * 3 + col][3]]"
+            (click)="onTriangleClick(row * 3 + col, 4)"></div>
+        </div>
+      </td>
+    </tr>
+  </table>
+</div>

@@ -48,12 +48,20 @@ export class AppComponent {
     }
   }
 
-  onDragStart(index: number): void {
+  onDragStart(event: DragEvent, index: number): void {
     this.dragIndex = index;
+    if (event.dataTransfer) {
+      event.dataTransfer.setData('text/plain', String(index));
+      event.dataTransfer.effectAllowed = 'move';
+    }
   }
 
   onDrop(index: number): void {
-    if (this.dragIndex === null || this.dragIndex === index) return;
+    if (this.dragIndex === null) return;
+    if (this.dragIndex === index) {
+      this.dragIndex = null;
+      return;
+    }
     const tmp = this.cellValues[this.dragIndex];
     this.cellValues[this.dragIndex] = this.cellValues[index];
     this.cellValues[index] = tmp;
@@ -63,6 +71,25 @@ export class AppComponent {
 
   onDragOver(event: DragEvent): void {
     event.preventDefault();
+  }
+
+  onPointerDown(index: number, event: PointerEvent): void {
+    event.preventDefault();
+    if (this.dragIndex === null) {
+      this.dragIndex = index;
+      return;
+    }
+
+    if (this.dragIndex === index) {
+      this.dragIndex = null;
+      return;
+    }
+
+    this.onDrop(index);
+  }
+
+  onPointerCancel(): void {
+    this.dragIndex = null;
   }
 
   onTriangleClick(cellIndex: number, key: number): void {

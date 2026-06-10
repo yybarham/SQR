@@ -6,8 +6,11 @@
   </div>
   <table [style.border]="solved ? '6px solid red' : null">
     <tr *ngFor="let row of [0, 1, 2]">
-      <td *ngFor="let col of [0, 1, 2]" draggable="true" (dragstart)="onDragStart(row * 3 + col)"
-        (dragover)="onDragOver($event)" (drop)="onDrop(row * 3 + col)">
+      <td *ngFor="let col of [0, 1, 2]" draggable="true" (dragstart)="onDragStart($event, row * 3 + col)"
+        (dragover)="onDragOver($event)" (drop)="onDrop(row * 3 + col)"
+        (pointerdown)="onPointerDown(row * 3 + col, $event)"
+        (pointercancel)="onPointerCancel()"
+        [class.selected]="dragIndex === row * 3 + col">
         <div class="diagonal-split">
           <div class="tri top"
             [style.background-color]="solved && row === 0 ? 'white' : colors[cellValues[row * 3 + col][0]]"
